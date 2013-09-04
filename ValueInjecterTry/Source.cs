@@ -19,7 +19,8 @@ namespace ValueInjecterTry
         {
             unchecked
             {
-                return ((ContentId != null ? ContentId.GetHashCode() : 0)*397) ^ (ContentName != null ? ContentName.GetHashCode() : 0);
+                return ((ContentId != null ? ContentId.GetHashCode() : 0)*397) ^
+                       (ContentName != null ? ContentName.GetHashCode() : 0);
             }
         }
 
@@ -38,8 +39,9 @@ namespace ValueInjecterTry
         protected override bool Match(ConventionInfo c)
         {
             return "Content" + c.SourceProp.Name == c.TargetProp.Name
-                 && c.SourceProp.Value != null;
+                   && c.SourceProp.Value != null;
         }
+
         protected override object SetValue(ConventionInfo c)
         {
             return c.SourceProp.Value.ToString();
@@ -57,7 +59,28 @@ namespace ValueInjecterTry
                     Id = 123
                 };
             var target = new Target();
-            var expectedTarget = new Target {ContentId = "123", ContentName = "my"};
+            var expectedTarget = new Target
+                {
+                    ContentId = "123",
+                    ContentName = "my"
+                };
+
+            target.InjectFrom<MyConvention>(source);
+            Console.WriteLine(target.ContentName);
+            Console.WriteLine(target.ContentId);
+            Assert.AreEqual(expectedTarget, target);
+        }
+
+        [Test]
+        public void should_not_transfer_object_null_porperty()
+        {
+            var source = new Source
+                {
+                    Name = "my",
+                    Id = null
+                };
+            var target = new Target();
+            var expectedTarget = new Target {ContentName = "my"};
 
             target.InjectFrom<MyConvention>(source);
             Console.WriteLine(target.ContentName);
