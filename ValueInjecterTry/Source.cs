@@ -6,7 +6,7 @@ namespace ValueInjecterTry
 {
     public class Source
     {
-        public int Id { set; get; }
+        public int? Id { set; get; }
         public String Name { set; get; }
     }
 
@@ -49,7 +49,7 @@ namespace ValueInjecterTry
     public class ValueInjecterTest
     {
         [Test]
-        public void should_transfer_correct()
+        public void should_transfer_object_correctly()
         {
             var source = new Source
                 {
@@ -58,6 +58,23 @@ namespace ValueInjecterTry
                 };
             var target = new Target();
             var expectedTarget = new Target {ContentId = "123", ContentName = "my"};
+
+            target.InjectFrom<MyConvention>(source);
+            Console.WriteLine(target.ContentName);
+            Console.WriteLine(target.ContentId);
+            Assert.AreEqual(expectedTarget, target);
+        }
+        
+        [Test]
+        public void should_not_transfer_object_null_porperty()
+        {
+            var source = new Source
+                {
+                    Name = "my",
+                    Id = null
+                };
+            var target = new Target();
+            var expectedTarget = new Target { ContentName = "my"};
 
             target.InjectFrom<MyConvention>(source);
             Console.WriteLine(target.ContentName);
