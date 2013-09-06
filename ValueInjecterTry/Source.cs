@@ -66,6 +66,7 @@ namespace ValueInjecterTry
                 };
 
             target.InjectFrom<MyConvention>(source);
+
             Console.WriteLine(target.ContentName);
             Console.WriteLine(target.ContentId);
             Assert.AreEqual(expectedTarget, target);
@@ -83,23 +84,7 @@ namespace ValueInjecterTry
             var expectedTarget = new Target {ContentName = "my"};
 
             target.InjectFrom<MyConvention>(source);
-            Console.WriteLine(target.ContentName);
-            Console.WriteLine(target.ContentId);
-            Assert.AreEqual(expectedTarget, target);
-        }
-        
-        [Test]
-        public void should_not_transfer_object_null_porperty()
-        {
-            var source = new Source
-                {
-                    Name = "my",
-                    Id = null
-                };
-            var target = new Target();
-            var expectedTarget = new Target { ContentName = "my"};
 
-            target.InjectFrom<MyConvention>(source);
             Console.WriteLine(target.ContentName);
             Console.WriteLine(target.ContentId);
             Assert.AreEqual(expectedTarget, target);
