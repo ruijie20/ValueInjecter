@@ -9,8 +9,8 @@ namespace ValueInjecterTry
         public int Id { get; set; }
         public string Name { get; set; }
 
-        public int Conuntry1 { get; set; }
-        public int Conuntry2 { get; set; }
+        public int Country1 { get; set; }
+        public int Country2 { get; set; }
     }
 
     public class PersonDto
@@ -46,15 +46,17 @@ namespace ValueInjecterTry
 
     public enum Country
     {
-        China, US, UK
+        China = 1, 
+        US = 2, 
+        UK = 3
     }
 
     public class IntToEnum : ConventionInjection
     {
         protected override bool Match(ConventionInfo c)
         {
-            return c.SourceProp.Name == c.TargetProp.Name && c.SourceProp.Type.IsSubclassOf(typeof (Enum))
-                   && c.TargetProp.Type == typeof (int);
+            return c.SourceProp.Type == typeof (int) && c.TargetProp.Type.IsSubclassOf(typeof(Enum)) &&
+                   c.SourceProp.Name == c.TargetProp.Name;
         }
     } 
 
@@ -66,7 +68,7 @@ namespace ValueInjecterTry
         {
             var person = new Person
                 {
-                    Id = 1, Conuntry1 = 2, Conuntry2 = 1, Name = "abc"
+                    Id = 1, Country1 = 2, Country2 = 1, Name = "abc"
                 };
             var expectedPersonDto = new PersonDto
                 {
